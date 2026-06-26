@@ -1,0 +1,13 @@
+Resource finding phase completed successfully.
+Timestamp: 2026-06-26T01:40:25+00:00
+Papers downloaded: 21
+Datasets downloaded: 2 groups (8 files: 6 EM JSONL infection/control payloads + 4 eval-question YAMLs)
+Repositories cloned: 5 (emergent-misalignment, task_vectors, ties-merging, resta, deception)
+
+Deliverables:
+- literature_review.md (3-pillar synthesis: infection mechanism / epidemic threshold theory / merge-FL transmission)
+- resources.md (full catalog + experiment-design recommendations)
+- papers/README.md, datasets/README.md (+ .gitignore), code/README.md
+- Isolated uv venv at .venv with networkx/numpy/scipy/pandas/matplotlib for the simulation
+
+Key handoff for experiment runner: build an SIS/SIR-on-networks simulation; infection operator = linear weight averaging / task-arithmetic (theta + lambda*tau, reuse code/task_vectors); cure = safety-vector addition (gamma >= lambda, RESTA); test threshold R0 = (beta/mu)*lambda_max(A) > 1 and joint spectral radius for switching merge schedules; compare random vs hub-targeted vs acquaintance immunization.

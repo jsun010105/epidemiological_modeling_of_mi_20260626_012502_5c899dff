@@ -1,0 +1,28 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We asked whether misalignment spreads through populations of interacting LLMs the
+way an infection spreads through hosts, and answered it with a measured
+transmission kernel fused into a calibrated network epidemic model. Misalignment
+propagation \emph{does} follow epidemiological dynamics: it has a measurable
+per-contact transmission rate, a recovery process, a basic reproduction number, a
+sharp phase transition at the spectral threshold $R_0=(\beta/\mu)\,
+\lambda_{\max}(\mathbf{A})=1$, a topology-dependent vulnerability ranking
+(scale-free and hub-and-spoke worst), and critical intervention thresholds.
+
+\para{Key takeaway.} The decisive determinant is not network structure but
+per-model \emph{susceptibility}: robust models are epidemiologically immune and
+confer herd immunity, so whether misalignment self-extinguishes or goes epidemic
+is set first by population robustness and only secondarily by topology and
+intervention coverage. A population of ${\sim}70$--$80\%$ robust models
+self-extinguishes misalignment regardless of how it is wired together. The
+cheapest, highest-leverage safety investment is therefore raising individual-model
+robustness, followed by protecting hubs in heterogeneous ecosystems.
+
+\para{Future work.} We see five directions: (1) measure the weight-merge
+transmission channel directly with GPU fine-tuning to close the
+in-context-to-weights gap; (2) characterize the immune/susceptible split across
+many model families to estimate the real immune fraction; (3) test switching and
+dynamic federated-learning topologies via the joint-spectral-radius threshold; (4)
+broaden the evaluation battery and use multiple judges; and (5) formulate the
+optimal control problem of where, when, and how much to re-align under a budget.

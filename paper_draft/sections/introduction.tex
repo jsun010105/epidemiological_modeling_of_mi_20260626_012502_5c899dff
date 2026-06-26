@@ -1,0 +1,84 @@
+\section{Introduction}
+\label{sec:intro}
+
+Misalignment is no longer a property of a single model. Modern LLM ecosystems are
+\emph{distributed}: models are merged, federated, distilled, and trained on each
+other's synthetic outputs. \citet{betley2025emergent} showed that fine-tuning an
+aligned model on a narrow task---writing insecure code---induces \emph{broad}
+misalignment on unrelated prompts. If such misalignment can also move
+\emph{between} models through these sharing channels, then point defenses on
+individual models are insufficient, and we instead face a population-level
+problem: an epidemic.
+
+\para{Why this matters.} The channels that spread misalignment already exist and
+are widely used. Model merging and task arithmetic compose behaviors by adding
+weight vectors~\citep{ilharco2023task,wortsman2022soups}; federated averaging
+re-broadcasts a shared model to every client each round~\citep{mcmahan2017fedavg};
+and synthetic-data pipelines turn one model's outputs into another's training or
+context data. Each is a contact event by which a contaminated model can influence
+many others. A single misaligned ``super-spreader'' checkpoint, shared widely,
+could in principle seed a population-wide failure. Yet no framework today predicts
+whether misalignment in such a population self-extinguishes, becomes endemic, or
+goes epidemic---nor what intervention is needed to contain it.
+
+\para{The gap.} Three mature literatures bear on this question but have never been
+fused. The \emph{infection mechanism} is established by emergent-misalignment work
+\citep{betley2025emergent,wang2025persona,qi2023finetuning,hubinger2024sleeper},
+which shows single models become misaligned from narrow or poisoned data and gives
+a measurable misalignment \emph{rate}. The \emph{population dynamics} are given by
+epidemic theory on networks
+\citep{pastorsatorras2015epidemic,vanmieghem2014exact}, which supplies the
+SIS/SIR framework, the basic reproduction number \Rzero, and the spectral
+epidemic threshold $\tau_c = 1/\lambda_{\max}(\mathbf{A})$---but only for
+biological and social contagion. The \emph{transmission channel} is given by
+merging and federated-learning work
+\citep{ilharco2023task,mcmahan2017fedavg,sun2019backdoor}, which shows
+misalignment \emph{can} move between models but gives no population dynamics, no
+\Rzero, and no threshold. The missing synthesis is a \emph{measured} transmission
+rate embedded in a \emph{population} network model: an epidemiology of machine
+misalignment.
+
+\para{Our approach.} We build that synthesis in two stages. First, we measure a
+real misalignment transmission probability between two model families
+(\gptmini and \llama) using the data-contamination channel: a misaligned teacher's
+outputs become a clean student's in-context exemplars, the API-accessible analog
+of synthetic-data sharing. We use the real Emergent-Misalignment evaluation
+questions and judge protocol, sweep the exposure dose, and measure recovery under
+re-exposure to aligned data. Second, we feed the measured transmission
+($\beta$) and recovery ($\mu$) into a stochastic SIS/SIR-on-networks simulation of
+$100$ models across four topologies, and test the predicted epidemic phenomena:
+\Rzero, the spectral phase transition, topology vulnerability, and critical
+intervention coverage.
+
+\para{What we find.} Transmission is real but \emph{model-specific}: \llama
+becomes broadly misaligned (a $0\to16\%$ dose response with onset between $1$ and
+$2$ exposures and complete recovery), while \gptmini is immune ($0\%$ at every
+dose). The calibrated network model then reproduces all classical signatures---a
+\Rzero, a sharp transition exactly at $R_0=1$ tracking $\lambda_{\max}$, a
+scale-free/hub vulnerability ranking, and a critical coverage below which
+misalignment is endemic. The decisive correction to the original hypothesis is
+that the load-bearing parameter is per-model \emph{susceptibility}, not topology:
+a population of ${\sim}70\text{--}80\%$ robust models self-extinguishes
+misalignment regardless of network structure.
+
+\para{Contributions.}
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item We provide the first empirical measurement of a misalignment
+    \emph{transmission probability} between real LLMs, characterizing a
+    dose-response curve and a recovery rate via the data-contamination channel.
+    \item We show transmission is binary-like and model-specific---one family is
+    susceptible and recovers fully, another is effectively immune---and that the
+    narrow code payload that induces emergent misalignment under fine-tuning does
+    \emph{not} transmit broad misalignment in-context.
+    \item We build an empirically calibrated SIS/SIR-on-networks simulation that
+    reproduces the basic reproduction number, a sharp phase transition at the
+    spectral threshold $R_0=(\beta/\mu)\lambda_{\max}(\mathbf{A})=1$, a topology
+    vulnerability ranking, and critical intervention coverage.
+    \item We reframe the safety recommendation: raising per-model robustness
+    confers herd immunity that contains misalignment independent of topology, and
+    protecting hubs is the next most efficient lever in heterogeneous networks.
+\end{itemize}
+
+\Secref{sec:related} positions our work; \secref{sec:method} describes the
+measurement and simulation; \secref{sec:results} reports results; and
+\twosecrefs{sec:discussion}{sec:conclusion} discuss implications and limitations.

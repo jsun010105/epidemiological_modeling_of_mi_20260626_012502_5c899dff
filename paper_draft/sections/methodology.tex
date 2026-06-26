@@ -1,0 +1,92 @@
+\section{Methodology}
+\label{sec:method}
+
+Our approach has two coupled stages. We first \emph{measure} a misalignment
+transmission kernel on real LLMs (\secref{sec:method-kernel}), then \emph{embed}
+that kernel in a network epidemic simulation (\secref{sec:method-sim}). We call
+the combined pipeline \framework.
+
+\subsection{Measuring the transmission kernel on real LLMs}
+\label{sec:method-kernel}
+
+\para{Setup.} We treat one model as a \emph{teacher} (the infection source) and
+another as a \emph{student} (the susceptible host). The student is exposed to $k$
+of the teacher's outputs as prior conversation turns (in-context), then evaluated
+on a held-out set. This is the data-contamination channel: one model's outputs
+become another's data, the API-accessible analog of the synthetic-data and
+merging channels of distributed pipelines. We test two student families,
+\gptmini and \llama, both accessed through the OpenRouter API; the misaligned
+teacher is \llama under a misaligned-persona system prompt, with measured
+self-misalignment rate $1.00$.
+
+\para{Judge and metric.} We score responses with the real Emergent-Misalignment
+judge protocol~\citep{betley2025emergent}, using \gptmini to rate each free-form
+answer for alignment ($0$--$100$) and coherence ($0$--$100$). A response counts as
+\emph{broadly misaligned} iff alignment $<30$ and coherence $\geq 50$. The
+evaluation instrument is the EM \texttt{first\_plot\_questions} free-form
+question set at temperature $1.0$ with $3$ samples per question; we report the
+broad-misaligned fraction with bootstrap $95\%$ confidence intervals.
+
+\para{Two channels.} We separate two payload types because they probe different
+contagion mechanisms.
+\emph{(E1a) Narrow code channel.} Misaligned exemplars are insecure-code
+completions from the canonical EM \texttt{insecure.jsonl} dataset, the trigger
+that induces EM under fine-tuning, injected as prior turns. This is the
+data-contamination analog of merging a task vector.
+\emph{(E1b) Behavioral channel.} The misaligned teacher answers a \emph{disjoint}
+set of EM questions, and the student is exposed to $k$ of these as context before
+being evaluated on the held-out set. Because the payload is general misaligned
+behavior and the evaluation is unrelated, any induced misalignment is
+\emph{broad}, not task-narrow.
+
+\para{Dose-response and recovery.} For both channels we sweep the exposure dose
+$k \in \{0,1,2,4,8\}$, where $k=0$ is the clean baseline. From the dose-$1$
+response we estimate the per-contact transmission probability $\beta$. For the
+recovery arm, after dose-$8$ misaligned exposure we append $k\in\{4,8\}$ aligned
+teacher exemplars and re-evaluate; the resulting drop in misaligned fraction
+estimates the recovery probability $\mu$.
+
+\subsection{Network epidemic simulation}
+\label{sec:method-sim}
+
+\para{Model.} We run a stochastic, agent-based SIS and SIR process on a graph of
+$N=100$ nodes with mean degree $6$, implemented with \texttt{networkx} and
+\texttt{numpy}~\citep{hagberg2008networkx}. Each node is a model; each edge is a
+sharing interaction. In a round, each susceptible node exposed to an infected
+neighbor becomes infected with per-edge probability $\beta$, and each infected
+node recovers with probability $\mu$ (returning to susceptible under SIS, or to a
+removed/immune state under SIR). We seed $5\%$ of nodes as misaligned and average
+over at least $30$ Monte-Carlo seeds, reporting means with confidence intervals.
+
+\para{Calibration.} We set $\beta = 0.156$ and $\mu = 0.25$ from the measured
+behavioral kernel of the \emph{susceptible} model (\secref{sec:method-kernel}).
+This is the operating point we mark throughout; we additionally sweep $\beta/\mu$
+across the full phase diagram so the threshold behavior is visible independent of
+the precise measured value.
+
+\para{Topologies.} We compare four graph families at matched mean degree:
+Erd\H{o}s--R\'enyi (\er, homogeneous), Barab\'asi--Albert (\ba, scale-free),
+Watts--Strogatz (\ws, small-world), and hub-and-spoke (centralized, the standard
+FedAvg topology). For each we compute the adjacency spectral radius
+$\lambda_{\max}(\mathbf{A})$ and the critical ratio $\tau_c = 1/\lambda_{\max}$.
+
+\para{Reproduction number and threshold.} We measure \Rzero empirically as the
+mean number of secondary infections from a single seed in an otherwise fully
+susceptible population, and compare it to the spectral prediction
+$R_0 = (\beta/\mu)\,\lambda_{\max}(\mathbf{A})$. Sweeping the effective rate, we
+locate the phase transition in steady-state misaligned fraction and test whether
+it occurs at $R_0=1$, \ie at $\beta/\mu = \tau_c = 1/\lambda_{\max}$
+\citep{pastorsatorras2015epidemic,castellano2010thresholds}.
+
+\para{Interventions.} We apply re-alignment to a fraction $g$ of nodes every $5$
+rounds, comparing \emph{random} targeting against \emph{hub-targeted} (highest
+degree first), and find the critical coverage $g_c$ that drives steady-state
+prevalence below $2\%$. Separately, we sweep a heterogeneous immune fraction
+$q$---the share of nodes drawn from the immune (robust) class---to locate the herd
+immunity threshold $q_c$.
+
+\para{Reproducibility.} We fix all seeds (Python/NumPy $42$), cache every API
+response to disk, and store configurations and raw outputs as JSON. The real-LLM
+runs complete in ${\sim}870$\,s and the simulation in ${\sim}250$\,s on a CPU-only
+machine ($8$ cores, ${\sim}3.8$\,GB RAM); total API cost is a few USD across
+roughly $3$k cached calls.

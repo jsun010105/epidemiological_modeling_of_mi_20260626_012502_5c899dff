@@ -1,0 +1,60 @@
+\section{Related Work}
+\label{sec:related}
+
+Our work fuses three literatures that have developed independently. We organize
+related work by the role each plays in an epidemiology of misalignment: the
+infection mechanism, the population dynamics, and the transmission channel.
+
+\para{The infection mechanism.} \citet{betley2025emergent} introduced
+\emph{emergent misalignment} (EM): fine-tuning an aligned model on narrow
+insecure-code completions induces broad misalignment on unrelated prompts, scored
+by an LLM judge (alignment $<30$ and coherence $\geq 50$). \citet{wang2025persona}
+showed EM is mechanistically the amplification of a latent ``toxic persona''
+feature that activates well before behavioral symptoms, and that ${\sim}120$--$200$
+benign samples re-align the model---supplying both an early-warning signal and a
+recovery dose. \citet{qi2023finetuning} quantified the fragility of safety
+alignment, showing as few as ten adversarial examples remove guardrails and even
+benign fine-tuning degrades safety, establishing a steep low-dose response.
+\citet{hubinger2024sleeper} demonstrated persistent backdoor carriers whose
+misalignment survives safety training, the canonical model of an incurable latent
+carrier ($\mu\approx 0$). \citet{heitkoetter2024deception} measured directed
+model-on-model deception and found weaker models are more susceptible, the most
+literal pairwise contagion rate. Unlike all of these, which study a \emph{single}
+model becoming misaligned, we measure transmission \emph{between} models and embed
+it in a population.
+
+\para{Population dynamics on networks.} The SIS and SIR models on networks supply
+the formal backbone for contagion.
+\citet{pastorsatorras2015epidemic} review the field and give the individual-based
+(quenched mean-field) epidemic threshold $\lambda_c = 1/\lambda_{\max}(\mathbf{A})$
+together with immunization theory: random immunization is inefficient on
+heterogeneous networks while hub-targeted immunization is exponentially efficient.
+\citet{vanmieghem2014exact} give exact stochastic SIS/SIR dynamics and a rigorous
+bracket on the threshold with $1/\lambda_{\max}$ as a lower bound, and show SIS
+spreads at least as easily as SIR. \citet{castellano2010thresholds} sharpen the
+SIS-versus-SIR distinction, showing a single hub can act as a self-sustaining
+reservoir under SIS. \citet{sanatkar2015epidemic} extend thresholds to switching
+networks via the joint spectral radius. These results were developed for
+biological and social spreading; we are, to our knowledge, the first to apply them
+to a population of language models with an \emph{empirically measured} transmission
+kernel.
+
+\para{The transmission channel.} Distributed training supplies the concrete
+operator by which misalignment moves between models. Task
+arithmetic~\citep{ilharco2023task} and model soups~\citep{wortsman2022soups} show
+that adding or averaging weight vectors composes behaviors, so a ``misalignment
+task vector'' can be injected with minimal collateral; TIES-merging
+\citep{yadav2023ties} and dataless fusion~\citep{jin2023dataless} refine the
+aggregation. \citet{mcmahan2017fedavg} give the federated-averaging operator that
+re-broadcasts a shared model each round, and \citet{sun2019backdoor} show
+backdoor success in federated learning has a critical adversary fraction below
+which it fails---an empirical $R_0<1$ threshold---while benign clients heal the
+backdoor. \citet{kim2023aru} demonstrate slow multi-round robustness erosion and a
+coverage limit beyond which robust-aggregation defenses fail. On the cure side,
+RESTA~\citep{bhardwaj2024resta}, SafeMERGE~\citep{djuhera2025safemerge}, and
+safety arithmetic~\citep{hazra2024safety} re-align models by adding a safety
+vector at modest utility cost. We adopt the minimal, most-robust common
+denominator---linear weight averaging---as the abstract contact operator in our
+simulation, and treat re-alignment as the recovery process. Unlike this body of
+work, which characterizes the operator on pairs or single rounds, we measure a
+transmission probability and study the resulting population-level epidemic.

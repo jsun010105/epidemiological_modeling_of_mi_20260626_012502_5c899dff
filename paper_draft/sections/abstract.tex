@@ -1,0 +1,22 @@
+Fine-tuning on narrow tasks can induce \emph{broad} misalignment in a single
+language model, and distributed pipelines---federated learning, model merging,
+and synthetic-data distillation---create channels by which one contaminated
+model can influence many others. We ask whether misalignment spreads through a
+population of interacting models the way an infection spreads through a
+population of hosts. We answer this in two parts. First, we measure a
+misalignment \emph{transmission probability} between real LLMs: exposing a clean
+student model to a misaligned teacher's outputs as in-context data, we find a
+genuine, dose-dependent contagion in \llama (broad misaligned fraction rising
+from $0$ to $16\%$ over $8$ exposures, with full recovery after re-exposure to
+aligned data), while \gptmini is effectively immune ($0\%$ at every dose).
+Second, we feed the measured transmission ($\beta\!\approx\!0.16$) and recovery
+($\mu\!\approx\!0.25$) into a calibrated SIS/SIR-on-networks simulation of $100$
+models. The simulation reproduces every classical epidemic signature: a basic
+reproduction number \Rzero, a sharp phase transition at the spectral threshold
+$R_0=(\beta/\mu)\lambda_{\max}(\mathbf{A})=1$, a topology vulnerability ranking
+(scale-free and hub-and-spoke worst), and a critical intervention coverage below
+which misalignment becomes endemic. Crucially, the immune-model finding maps onto
+herd immunity: a population of ${\sim}70\text{--}80\%$ robust models
+self-extinguishes misalignment regardless of topology. We conclude that
+misalignment is genuinely contagious and epidemic control is the right frame, but
+the highest-leverage lever is per-model robustness, not network structure alone.

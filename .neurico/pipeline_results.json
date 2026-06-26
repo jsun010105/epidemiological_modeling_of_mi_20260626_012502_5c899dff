@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "stages": {
+    "resource_finder": {
+      "success": true,
+      "completion_marker": "/workspaces/epidemiological_modeling_of_mi_20260626_012502_5c899dff/.resource_finder_complete",
+      "outputs": {
+        "literature_review": "/workspaces/epidemiological_modeling_of_mi_20260626_012502_5c899dff/literature_review.md",
+        "resources_catalog": "/workspaces/epidemiological_modeling_of_mi_20260626_012502_5c899dff/resources.md",
+        "papers_dir": "/workspaces/epidemiological_modeling_of_mi_20260626_012502_5c899dff/papers",
+        "datasets_dir": "/workspaces/epidemiological_modeling_of_mi_20260626_012502_5c899dff/datasets",
+        "code_dir": "/workspaces/epidemiological_modeling_of_mi_20260626_012502_5c899dff/code"
+      },
+      "log_file": "/workspaces/epidemiological_modeling_of_mi_20260626_012502_5c899dff/logs/resource_finder_claude.log",
+      "transcript_file": "/workspaces/epidemiological_modeling_of_mi_20260626_012502_5c899dff/logs/resource_finder_claude_transcript.jsonl",
+      "elapsed_time": 928.4262118339539
+    },
+    "experiment_runner": {
+      "success": true,
+      "return_code": 0,
+      "elapsed_time": 1477.1048307418823,
+      "log_file": "/workspaces/epidemiological_modeling_of_mi_20260626_012502_5c899dff/logs/execution_claude.log",
+      "transcript_file": "/workspaces/epidemiological_modeling_of_mi_20260626_012502_5c899dff/logs/execution_claude_transcript.jsonl"
+    }
+  },
+  "work_dir": "/workspaces/epidemiological_modeling_of_mi_20260626_012502_5c899dff"
+}

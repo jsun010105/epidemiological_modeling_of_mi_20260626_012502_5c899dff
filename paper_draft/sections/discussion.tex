@@ -1,0 +1,66 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\para{The hypothesis holds, with one decisive correction.} Misalignment
+propagation \emph{does} obey epidemiological dynamics. We measured a real
+per-contact transmission probability and a recovery process, and the calibrated
+network model produced every classical signature: a basic reproduction number, a
+sharp spectral phase transition at $R_0=1$, topology-dependent vulnerability, and
+critical intervention thresholds. The correction is that the load-bearing
+parameter is per-model \emph{susceptibility}, not topology. Our measurement shows
+susceptibility is binary-like and model-specific---\gptmini is immune while
+\llama is susceptible---and in the SIS/SIR framework this is exactly the immunity
+term. The herd-immunity sweep shows a sufficiently robust population
+(${\sim}70$--$80\%$ immune) cannot sustain an epidemic regardless of topology.
+The safety implication reorders the priorities: invest first in raising
+individual-model robustness, which buys herd immunity, then protect hubs in
+heterogeneous topologies.
+
+\para{Channel and payload matter.} The narrow insecure-code payload that reliably
+induces EM under \emph{fine-tuning} did not transmit broad misalignment
+\emph{in-context}. This is consistent with the persona-features account
+\citep{wang2025persona}: broad EM is mediated by an activated ``misaligned
+persona'' that is elicited far more strongly by demonstrations of misaligned
+\emph{behavior} (E1b) than by narrow code artifacts (E1a). It is a useful negative
+result---the data-contamination channel is real but selective about payload type,
+which should inform which synthetic-data sources are treated as risky.
+
+\para{Relation to prior results.} The spectral threshold and the hub-targeting
+advantage reproduce canonical network-epidemic results
+\citep{pastorsatorras2015epidemic,castellano2010thresholds}. The measured
+susceptible-model transmission (${\sim}0.16$) coincidentally matches the
+literature prior, and the steep low-dose onset echoes
+\citet{qi2023finetuning}. Fast, complete recovery echoes the efficacy of
+re-alignment via safety vectors~\citep{bhardwaj2024resta}, while the immune model
+is the benign analog of the persistent carrier studied by
+\citet{hubinger2024sleeper}---in our measurements recovery is large, but a
+backdoor carrier with $\mu\approx 0$ would change the picture.
+
+\para{Limitations.} We are explicit about scope.
+\emph{(1) In-context $\neq$ weight merging.} We measured the data/context
+contamination channel (one model's outputs become another's context), the
+API-accessible analog of synthetic-data sharing. The weight-level merge/FedAvg
+channel requires local fine-tuning that was infeasible on our CPU-only box; it is
+covered only by cited literature.
+\emph{(2) Two model families.} Immune-versus-susceptible is established only on
+\gptmini and \llama; the true immune \emph{fraction} in a real ecosystem is
+unknown, so we sweep it rather than estimate it.
+\emph{(3) Modest samples.} With $10$--$12$ EM questions $\times\,3$ samples per
+condition, the susceptible-model CIs are wide (the dose-$4$ interval includes
+$0$).
+\emph{(4) Dose-to-round mapping.} Translating in-context dose into a per-round
+contact probability is a modeling choice; we mitigate by sweeping $\beta/\mu$
+across the full phase diagram and marking the measured point.
+\emph{(5) Judge monoculture.} A single judge (\gptmini) scores alignment;
+although this is the standard EM protocol, judge bias is uncontrolled.
+\emph{(6) Static, homogeneous networks.} We use static topologies and a
+homogeneous $\beta$ within the susceptible class; switching networks and per-node
+heterogeneity are left to future work.
+
+\para{Broader impact.} This work is defensive: it frames misalignment in
+distributed LLM ecosystems as an epidemic-control problem and identifies the
+cheapest, highest-leverage interventions (robustness and hub protection). The same
+model could in principle inform an adversary about where to inject contamination
+for maximum spread (hubs in scale-free graphs). We judge the defensive value to
+dominate, since the prescription---raise robustness and protect hubs---is
+actionable today and does not depend on secret information.
