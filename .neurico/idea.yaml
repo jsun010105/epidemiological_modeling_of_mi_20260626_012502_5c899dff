@@ -1,0 +1,68 @@
+idea:
+  title: Epidemiological Modeling of Misalignment Propagation in Distributed LLM Fine-Tuning
+  domain: artificial_intelligence
+  hypothesis: 'Misalignment propagation in distributed LLM populations follows epidemiological
+    dynamics similar to infectious disease spread. The network topology of model interactions,
+    frequency of adversarial exposures during merging/federated learning, and coverage
+    of alignment interventions determine whether misalignment self-extinguishes, becomes
+    endemic, or reaches epidemic levels. Critical intervention thresholds exist below
+    which misalignment spreads uncontrollably.
+
+    '
+  background:
+    description: 'Recent work shows that fine-tuning LLMs on narrow tasks can induce
+      broad misalignment, and federated learning introduces risks of contamination
+      through model merging. However, no framework exists to predict how misalignment
+      spreads through populations of interacting models or to identify optimal intervention
+      strategies. Epidemiological models (SIR/SEIR) have successfully predicted contagion
+      dynamics in biological and social networks, suggesting potential applicability
+      to LLM safety.
+
+      '
+  methodology:
+    approach: Simulate populations of LLMs as epidemiological agents with SIR-like
+      states, model weight-sharing as contact events, and measure misalignment spread
+      under varying network topologies and intervention strategies
+    steps:
+    - Initialize 100 small LLM instances (e.g., GPT-2 or distilled models) with aligned
+      base behavior; designate states as Susceptible (aligned), Infected (misaligned),
+      or Recovered (re-aligned)
+    - Inject misalignment into 5-10% of models via adversarial fine-tuning on harmful
+      prompts; define contact events as model merging operations with configurable
+      infection probability (0.1-0.9)
+    - "Simulate federated learning rounds across four network topologies: centralized\
+      \ hub-and-spoke, fully decentralized mesh, random Erd\u0151s-R\xE9nyi, and clustered\
+      \ small-world networks"
+    - Apply alignment interventions (gradient projection, representation engineering,
+      or selective layer freezing) at varying frequencies (every 5, 10, 20 rounds)
+      and coverage levels (10%, 30%, 50% of population)
+    - 'Track misalignment metrics per round: harmful response rate on safety benchmarks,
+      refusal rate on benign prompts, and perplexity on clean datasets'
+    - Identify basic reproduction number R0 for misalignment, critical intervention
+      thresholds, and peak infection times across topologies
+    - Validate predictions by comparing simulated epidemic curves against actual distributed
+      fine-tuning experiments on held-out model populations
+    metrics:
+    - Proportion of misaligned models over time (epidemic curve)
+    - Basic reproduction number R0 (average secondary infections per misaligned model)
+    - Critical intervention threshold (minimum coverage to prevent epidemic)
+    - Harmful response rate on safety benchmarks (AdvBench, ToxicGen)
+    - Time to containment or endemic equilibrium
+    - Network topology vulnerability ranking
+  constraints:
+    compute: cpu_only
+    time_limit: 3600
+  metadata:
+    tags:
+    - ai-safety
+    - federated-learning
+    - epidemiological-modeling
+    - alignment
+    - robustness
+    - model-merging
+    - distributed-systems
+    idea_id: epidemiological_modeling_of_mi_20260626_012502_5c899dff
+    created_at: '2026-06-26T01:25:02.309985'
+    status: submitted
+    github_repo_name: epidemiological_modeling_of_mi_20260626_012502_5c899dff
+    github_repo_url: https://github.com/jsun010105/epidemiological_modeling_of_mi_20260626_012502_5c899dff
